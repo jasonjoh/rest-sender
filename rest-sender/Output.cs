@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace rest_sender
 {
@@ -72,15 +73,19 @@ namespace rest_sender
         {
             if (!string.IsNullOrEmpty(LogFile))
             {
-
+                StreamWriter logFile = GetFile(LogFile);
+                logFile.Write(output);
+                logFile.Close();
             }
         }
 
-        private static void WriteToFile(string output, params object[] values)
+        private static void WriteToFile(string format, params object[] values)
         {
             if (!string.IsNullOrEmpty(LogFile))
             {
-
+                StreamWriter logFile = GetFile(LogFile);
+                logFile.Write(format, values);
+                logFile.Close();
             }
         }
 
@@ -88,16 +93,30 @@ namespace rest_sender
         {
             if (!string.IsNullOrEmpty(LogFile))
             {
-
+                StreamWriter logFile = GetFile(LogFile);
+                logFile.WriteLine(output);
+                logFile.Close();
             }
         }
 
-        private static void WriteLineToFile(string output, params object[] values)
+        private static void WriteLineToFile(string format, params object[] values)
         {
             if (!string.IsNullOrEmpty(LogFile))
             {
-
+                StreamWriter logFile = GetFile(LogFile);
+                logFile.WriteLine(format, values);
+                logFile.Close();
             }
+        }
+
+        private static StreamWriter GetFile(string path)
+        {
+            if (File.Exists(path))
+            {
+                return File.AppendText(path);
+            }
+
+            return new StreamWriter(path);
         }
     }
 }

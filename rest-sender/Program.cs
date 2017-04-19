@@ -39,13 +39,17 @@ namespace rest_sender
                 return;
             }
 
+            Output.LogFile = options.LogFile;
+
             string token = await GetAccessToken(options.GetQualifiedScopes());
             if (options.OutputToken)
             {
                 Output.WriteLine(Output.Info, "Access token: {0}", token);
             }
-
-            await DoRequest(options, token);
+            if (!string.IsNullOrEmpty(token))
+            {
+                await DoRequest(options, token);
+            }
         }
 
         static async Task<string> GetAccessToken(string[] scopes)
